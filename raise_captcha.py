@@ -6,6 +6,7 @@ g.setup(reuse_cookies=True, debug=True)
 store = []
 vends = []
 
+
 def get_img(h):
     alter = Grab()
     alter.cookies.load_from_file('cook.json')
@@ -16,7 +17,7 @@ def get_img(h):
     f.write(alter.doc.body)
 
 
-def solve_capcha(somefunc):
+def solve_captcha(somefunc):
     def exec_input_func(*args):
         if args:
             somefunc(args[0])
@@ -34,20 +35,19 @@ def solve_capcha(somefunc):
                     print(res)
                     g.doc.set_input('captcha', res)
                     g.doc.submit()
-                    print(g.doc.select('//html').html())
                     exec_input_func(args[0]) if args else exec_input_func()
                     break
     return exec_input_func
 
 
-@solve_capcha
+@solve_captcha
 def get_vendors():
     g.go('https://elmir.ua/voltage_regulators/')
     for i in g.doc.select('//ul[@id="list-0"]/li/a'):
         vends.append({'name': i.text(), 'url': i.select('@href').text()})
 
 
-@solve_capcha
+@solve_captcha
 def get_products(url):
     g.go(url['url'])
     for el in g.doc.select('//ul[@id="vitrina-tovars"]/li/section'):

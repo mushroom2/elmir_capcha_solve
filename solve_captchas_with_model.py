@@ -1,6 +1,5 @@
 from keras.models import load_model
 from helpers import resize_to_fit
-from imutils import paths
 import numpy as np
 import imutils
 import cv2
@@ -9,7 +8,7 @@ import pickle
 
 MODEL_FILENAME = "captcha_model.hdf5"
 MODEL_LABELS_FILENAME = "model_labels.dat"
-CAPTCHA_IMAGE_FOLDER = "tttt"
+CAPTCHA_IMAGE = r"D:\somebot\elmir_capcha_solve\ccc.jpg"
 
 
 # Load up the model labels (so we can translate model predictions to actual letters)
@@ -19,14 +18,9 @@ with open(MODEL_LABELS_FILENAME, "rb") as f:
 # Load the trained neural network
 model = load_model(MODEL_FILENAME)
 
-# Grab some random CAPTCHA images to test against.
-# In the real world, you'd replace this section with code to grab a real
-# CAPTCHA image from a live website.
-captcha_image_files = list(paths.list_images(CAPTCHA_IMAGE_FOLDER))
-captcha_image_files = np.random.choice(captcha_image_files, size=(10,), replace=False)
 
 def get_capcha():
-    image = cv2.imread(r'D:\somebot\ccc.jpg')
+    image = cv2.imread(CAPTCHA_IMAGE)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     # Add some extra padding around the image
@@ -100,7 +94,3 @@ def get_capcha():
     # Print the captcha's text
     captcha_text = "".join(predictions)
     return captcha_text
-
-
-if __name__ == '__main__':
-    get_capcha('https://elmir.ua/inc/CaptchaSecurityImages.php?width=110&height=60&characters=4')
